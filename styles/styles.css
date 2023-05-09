@@ -28,6 +28,66 @@ header {
 .cerrar-menu {
   display: none;
 }
+/* Ahora voy a modificar al icono del carrito */
+.container-icon {
+  position: relative;
+}
+.icon-cart {
+  font-size: 28px;
+}
+.icon-cart:hover {
+  cursor: pointer;
+}
+.container-icon__count-product {
+  position: absolute;
+  top: 80%;
+  right: 0;
+  background-color: black;
+  color: white;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.hidden-cart {
+  display: none;
+}
+.container-icon__products {
+  position: absolute;
+  top: 120%;
+  right: 0;
+  background-color: white;
+  width: 400px;
+  z-index: 1;
+  border-radius: 10px;
+}
+.cart-total {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+  gap: 20px;
+}
+
+/* Ahora modifico el carrito cuando lo abrimos */
+
+.cart-producto {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  gap: 20px;
+  border-bottom: 1px solid black;
+}
+.cart-producto__info {
+  display: flex;
+  gap: 50px;
+}
+.cart-producto__eliminar:hover {
+  cursor: pointer;
+}
 /* modificando header */
 
 .body-login {

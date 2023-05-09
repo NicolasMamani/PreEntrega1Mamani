@@ -63,7 +63,7 @@ function crearHtmlBase() {
     </div>
     <p class="fw-bold text-center">$${indumentaria[i].precio}</p>
     <div class="text-center">
-      <a href="#" class="btn btn-primary">Comprar</a>
+      <a href="#" class="btn btn-primary btn-comprar">Comprar</a>
     </div>
   </div>
 </div>`;
@@ -85,7 +85,7 @@ function crearHtml(objeto) {
     </div>
     <p class="fw-bold text-center">$${objeto.precio}</p>
     <div class="text-center">
-      <a href="#" class="btn btn-primary">Comprar</a>
+      <a href="#" class="btn btn-primary btn-comprar">Comprar</a>
     </div>
   </div>
 </div>`;
@@ -116,3 +116,111 @@ btnAbrir.addEventListener("click", () => {
 btnCerrar.addEventListener("click", () => {
   nav.classList.remove("visible");
 });
+
+/* Ahora voy a trabajar con el carrito */
+const btnCarrito = document.querySelector(".container-icon");
+const contenedorCarrito = document.querySelector(".container-icon__products");
+btnCarrito.addEventListener("click", () => {
+  contenedorCarrito.classList.toggle("hidden-cart");
+});
+
+//obtengo todos los productos
+const productsList = document.querySelector(".contenedor-dinamico");
+
+//variable donde guardare todos los productos que el usuario seleccione
+let allProducts = [];
+
+//variables para trabajar con el total y el contador
+const valorTotal = document.querySelector(".total-pagar");
+const contadorProductos = document.querySelector(".count-product");
+
+//variable que se usa para los productos del LocalStorage
+const productosLocalStorage =
+  JSON.parse(localStorage.getItem("productos")) || [];
+
+productsList.addEventListener("click", (e) => {
+  //usando la libreria Toastify
+  Toastify({
+    text: "Elemento agregado correctamente",
+    duration: 3000,
+    destination: "https://github.com/apvarun/toastify-js",
+    newWindow: true,
+    close: true,
+    gravity: "bottom", // `top` or `bottom`
+    position: "right", // `left`, `center` or `right`
+    stopOnFocus: true, // Prevents dismissing of toast on hover
+    style: {
+      background: "black",
+    },
+    onClick: function () {}, // Callback after click
+  }).showToast();
+
+  //Lógica del botón
+  if (e.target.classList.contains("btn-comprar")) {
+    //le pongo el prevent default porque sino por cada click sube arriba de todo
+    e.preventDefault();
+    //obtengo el producto obteniendo el padre del padre del botón
+    const producto = e.target.parentElement.parentElement;
+    //guardo la info del producto en un objeto
+    const infoProducto = {
+      cantidad: 1,
+      nombre: producto.querySelector("h5").textContent,
+      precio: producto.querySelector("p").textContent,
+    };
+
+    console.log(infoProducto);
+
+    //ahora vamos a ver si el producto ya se sumo previamente o es la primera vez
+    const existe = allProducts.some(
+      (element) => element.nombre === infoProducto.nombre
+    );
+    if (existe) {
+      //Vamos a crear un array que contenga la cantidad actualizada en caso de ser necesario
+      const productos = allProducts.map((element) => {
+        if (element.nombre === infoProducto.nombre) {
+          element.cantidad++;
+          return element;
+        } else {
+          return element;
+        }
+      });
+      allProducts = [...productos];
+    } else {
+      //le agregamos el nuevo elemento porque es la primera vez que se selecciona
+      allProducts = [...allProducts, infoProducto];
+    }
+    mostarCarrito();
+  }
+});
+let rowProduct = document.querySelector(".row-products");
+
+//Función para mostrar el html del carrito de compra
+function mostarCarrito() {
+  //variables para el total de productos
+  let total = 0;
+  let totalProductos = 0;
+  rowProduct.innerHTML = "";
+  console.log(allProducts);
+  allProducts.forEach((producto) => {
+    const nuevoProducto = document.createElement("div");
+    nuevoProducto.innerHTML = `
+    <div class="cart-producto">
+      <div class="cart-producto__info">
+    <span>${producto.cantidad}</span>
+    <p>${producto.nombre}</p>
+    <span>${producto.precio}</span>
+  </div>
+  <div class="cart-producto__eliminar">
+    <i class="bi bi-x"></i>
+  </div>
+</div>
+    `;
+    rowProduct.append(nuevoProducto);
+
+    //Sumo el total
+    total += parseInt(producto.precio.slice(1)) * producto.cantidad;
+    totalProductos += producto.cantidad;
+    valorTotal.innerHTML = `$${total}`;
+    contadorProductos.innerText = totalProductos;
+  });
+}

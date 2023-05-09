@@ -17,6 +17,12 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css"
     />
+    <!-- Link a Toastify js -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
     <!-- Link a css -->
     <link rel="stylesheet" href="../styles/styles.css" />
   </head>
@@ -52,6 +58,24 @@
               Buscar
             </button>
           </li>
+          <li>
+            <div class="container-icon">
+              <div class="container-icon__cart">
+                <i class="bi bi-basket2-fill icon-cart"></i>
+                <!-- Cambiar nombre -->
+                <div class="container-icon__count-product">
+                  <span class="count-product">0</span>
+                </div>
+              </div>
+              <div class="container-icon__products hidden-cart">
+                <div class="row-products"></div>
+                <div class="cart-total">
+                  <h3>Total:</h3>
+                  <span class="total-pagar">$0</span>
+                </div>
+              </div>
+            </div>
+          </li>
         </ul>
       </nav>
     </header>
@@ -64,6 +88,12 @@
         </div>
       </div>
     </main>
+    <!-- Link a script de Toastify js -->
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/toastify-js"
+    ></script>
+    <!-- Link a script propio -->
     <script src="../js/productos.js"></script>
   </body>
 </html>
