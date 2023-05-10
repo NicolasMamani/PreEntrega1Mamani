@@ -1,0 +1,49 @@
+[
+  {
+    "nombre": "Zapatillas Puma Future Rider De Hombre",
+
+    "precio": 27719.0,
+
+    "img": "../imagenes/productos/ZapatillasPuma1SinFondo.png"
+  },
+
+  {
+    "nombre": "Zapatillas Suede Classic XXI ADP",
+
+    "precio": 29999.0,
+
+    "img": "../imagenes/productos/ZapatillaPuma2.png"
+  },
+
+  {
+    "nombre": "Zapatillas Adidas Fast Blue",
+
+    "precio": 39999.0,
+
+    "img": "../imagenes/productos/ZapatillasAdidas2.png"
+  },
+
+  {
+    "nombre": "Botines FUTURE Z 3.4 Neymar Jr ",
+
+    "precio": 25199.0,
+
+    "img": "../imagenes/productos/BotinesNeySinFondo.png"
+  },
+
+  {
+    "nombre": "Campera Puma",
+
+    "precio": 8399.0,
+
+    "img": "../imagenes/productos/CamperaPuma.png"
+  },
+
+  {
+    "nombre": "Remera Argentina entrenamiento",
+
+    "precio": 35999.0,
+
+    "img": "../imagenes/productos/RemeraArgentina.png"
+  }
+]

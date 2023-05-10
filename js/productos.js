@@ -1,5 +1,15 @@
+//Consumiendo con fetch el JSON de nuestra data
+fetch("../data/data.json")
+  .then((res) => res.json())
+  .then((data) => {
+    const indumentaria = data;
+    console.log(data);
+    window.onload = crearHtmlBase(indumentaria);
+    mostarCarrito();
+  });
+
 //Declaro un array de objetos literales sobre indumentaria que se mostrara en Productos
-const indumentaria = [
+/* const indumentaria = [
   {
     nombre: "Zapatillas Puma Future Rider De Hombre",
     precio: 27719.0,
@@ -32,6 +42,7 @@ const indumentaria = [
     img: "../imagenes/productos/RemeraArgentina.png",
   },
 ];
+console.log("Indumentaria -> " + indumentaria); */
 
 //tomamos el contenedor dinamico
 const contenedorDinamico = document.querySelector(".contenedor-dinamico");
@@ -42,10 +53,10 @@ const btnAbrir = document.querySelector("#btn-abrir");
 const btnCerrar = document.querySelector("#btn-cerrar");
 
 //renderizo los elementos html
-window.onload = crearHtmlBase();
+/* window.onload = crearHtmlBase(); */
 
 //creamos una función que cree los objetos
-function crearHtmlBase() {
+function crearHtmlBase(indumentaria) {
   //primero elimino el contenido html que tenga el contenedor dinamico para que no se acumulen cards en caso de ya haber buscado
   contenedorDinamico.innerHTML = "";
   let html = "";
@@ -105,7 +116,7 @@ btnSearch.addEventListener("click", (e) => {
     let encontrado = buscarIndumentaria(indumentaria, navInput.value);
     crearHtml(encontrado);
   } else {
-    crearHtmlBase();
+    crearHtmlBase(indumentaria);
   }
 });
 
@@ -128,7 +139,7 @@ btnCarrito.addEventListener("click", () => {
 const productsList = document.querySelector(".contenedor-dinamico");
 
 //variable donde guardare todos los productos que el usuario seleccione
-let allProducts = [];
+let allProducts = JSON.parse(localStorage.getItem("productos")) || [];
 
 //variables para trabajar con el total y el contador
 const valorTotal = document.querySelector(".total-pagar");
@@ -210,7 +221,7 @@ function mostarCarrito() {
     <p>${producto.nombre}</p>
     <span>${producto.precio}</span>
   </div>
-  <div class="cart-producto__eliminar">
+  <div class="cart-producto__eliminar" id="btn-eliminar">
     <i class="bi bi-x"></i>
   </div>
 </div>
@@ -224,3 +235,39 @@ function mostarCarrito() {
     contadorProductos.innerText = totalProductos;
   });
 }
+//Lógica para eliminar un producto
+//Lo de abajo no funciona
+/* rowProduct.addEventListener("click", (e) => {
+  console.log(e.target.classList.contains("cart-producto"));
+  if (e.target.classList.contains("cart-producto__eliminar")) {
+    //e.target.classList.contains("btn-comprar")
+    e.preventDefault();
+  }
+}); */
+//este tampoco me anda xd
+/* const btnEliminar = rowProduct.querySelector("#btn-eliminar");
+console.log(btnEliminar);
+btnEliminar.addEventListener("click", () => {
+  console.log("tocaste click");
+});
+ */
+//Por si el usuario recarga la página
+window.addEventListener("beforeunload", (e) => {
+  localStorage.setItem("productos", JSON.stringify(allProducts));
+});
+/* mostarCarrito(); */
+const btnTerminar = document.querySelector("#btn-terminar");
+btnTerminar.addEventListener("click", () => {
+  localStorage.removeItem("productos");
+  allProducts = [];
+  contadorProductos.innerText = 0;
+  mostarCarrito();
+});
+/* ---------------------- */
+//window.addEventListener('beforeunload', function(event) {
+// Aquí puedes hacer alguna acción antes de que la página se refresque
+// Por ejemplo, pedir al usuario que confirme que desea salir de la página
+//event.preventDefault(); // Evita que la página se refresque automáticamente
+//event.returnValue = ''; // Requerido por algunos navegadores para mostrar un mensaje personalizado
+//});
+/* ----------------------- */
