@@ -2,8 +2,7 @@
 fetch("../data/data.json")
   .then((res) => res.json())
   .then((data) => {
-    const indumentaria = data;
-    console.log(data);
+    let indumentaria = data;
     window.onload = crearHtmlBase(indumentaria);
     mostarCarrito();
   });
@@ -111,13 +110,18 @@ function buscarIndumentaria(arr, elemento) {
 //uso del evento click para que me cree un elemento html
 btnSearch.addEventListener("click", (e) => {
   e.preventDefault();
-  //si el buscador esta vacio se mostraran todos los productos, sino se mostra lo introducido
-  if (navInput.value != "") {
-    let encontrado = buscarIndumentaria(indumentaria, navInput.value);
-    crearHtml(encontrado);
-  } else {
-    crearHtmlBase(indumentaria);
-  }
+  fetch("../data/data.json")
+    .then((res) => res.json())
+    .then((data) => {
+      let indumentaria = data;
+      //si el buscador esta vacio se mostraran todos los productos, sino se mostra lo introducido
+      if (navInput.value != "") {
+        let encontrado = buscarIndumentaria(indumentaria, navInput.value);
+        crearHtml(encontrado);
+      } else {
+        crearHtmlBase(indumentaria);
+      }
+    });
 });
 
 //Lógica para el menu hamburguesa
@@ -151,20 +155,6 @@ const productosLocalStorage =
 
 productsList.addEventListener("click", (e) => {
   //usando la libreria Toastify
-  Toastify({
-    text: "Elemento agregado correctamente",
-    duration: 3000,
-    destination: "https://github.com/apvarun/toastify-js",
-    newWindow: true,
-    close: true,
-    gravity: "bottom", // `top` or `bottom`
-    position: "right", // `left`, `center` or `right`
-    stopOnFocus: true, // Prevents dismissing of toast on hover
-    style: {
-      background: "black",
-    },
-    onClick: function () {}, // Callback after click
-  }).showToast();
 
   //Lógica del botón
   if (e.target.classList.contains("btn-comprar")) {
@@ -201,6 +191,21 @@ productsList.addEventListener("click", (e) => {
       allProducts = [...allProducts, infoProducto];
     }
     mostarCarrito();
+    //Llamada a libreria Toastify
+    Toastify({
+      text: "Elemento agregado correctamente",
+      duration: 3000,
+      destination: "https://github.com/apvarun/toastify-js",
+      newWindow: true,
+      close: true,
+      gravity: "bottom", // `top` or `bottom`
+      position: "right", // `left`, `center` or `right`
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      style: {
+        background: "black",
+      },
+      onClick: function () {}, // Callback after click
+    }).showToast();
   }
 });
 let rowProduct = document.querySelector(".row-products");
@@ -218,7 +223,7 @@ function mostarCarrito() {
     <div class="cart-producto">
       <div class="cart-producto__info">
     <span>${producto.cantidad}</span>
-    <p>${producto.nombre}</p>
+    <p id="producto-name">${producto.nombre}</p>
     <span>${producto.precio}</span>
   </div>
   <div class="cart-producto__eliminar" id="btn-eliminar">
@@ -237,37 +242,52 @@ function mostarCarrito() {
 }
 //Lógica para eliminar un producto
 //Lo de abajo no funciona
-/* rowProduct.addEventListener("click", (e) => {
-  console.log(e.target.classList.contains("cart-producto"));
-  if (e.target.classList.contains("cart-producto__eliminar")) {
+rowProduct.addEventListener("click", (e) => {
+  if (e.target.classList.contains("bi")) {
     //e.target.classList.contains("btn-comprar")
     e.preventDefault();
+    Swal.fire({
+      title: "¿Seguro que quiere eliminar el producto?",
+      text: "Tu no podrás revertir esto",
+      icon: "warning",
+      showCancelButton: true,
+      cancelButtonText: "No, cancelar",
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, borrarlo",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire("Eliminado!", "Tu borraste el producto", "success");
+        const padreObjetoEliminar = e.target.parentElement.parentElement;
+        const objetoEliminar =
+          padreObjetoEliminar.querySelector("#producto-name");
+        //solo dejo en el array allProducts a todos los objetos con nombre diferente al del que quiero eliminar
+        allProducts = allProducts.filter((element) => {
+          return element.nombre !== objetoEliminar.innerText;
+        });
+        //pongo el contador en cero una vez que el largo del array allProducts sea cero
+        if (allProducts.length === 0) {
+          contadorProductos.innerText = 0;
+        }
+        mostarCarrito();
+      }
+    });
   }
-}); */
-//este tampoco me anda xd
-/* const btnEliminar = rowProduct.querySelector("#btn-eliminar");
-console.log(btnEliminar);
-btnEliminar.addEventListener("click", () => {
-  console.log("tocaste click");
 });
- */
+
 //Por si el usuario recarga la página
 window.addEventListener("beforeunload", (e) => {
   localStorage.setItem("productos", JSON.stringify(allProducts));
 });
-/* mostarCarrito(); */
+
 const btnTerminar = document.querySelector("#btn-terminar");
 btnTerminar.addEventListener("click", () => {
   localStorage.removeItem("productos");
   allProducts = [];
   contadorProductos.innerText = 0;
   mostarCarrito();
+  Swal.fire({
+    icon: "success",
+    title: "Comprado con exito",
+  });
 });
-/* ---------------------- */
-//window.addEventListener('beforeunload', function(event) {
-// Aquí puedes hacer alguna acción antes de que la página se refresque
-// Por ejemplo, pedir al usuario que confirme que desea salir de la página
-//event.preventDefault(); // Evita que la página se refresque automáticamente
-//event.returnValue = ''; // Requerido por algunos navegadores para mostrar un mensaje personalizado
-//});
-/* ----------------------- */
