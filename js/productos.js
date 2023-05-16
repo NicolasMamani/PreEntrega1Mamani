@@ -7,42 +7,6 @@ fetch("../data/data.json")
     mostarCarrito();
   });
 
-//Declaro un array de objetos literales sobre indumentaria que se mostrara en Productos
-/* const indumentaria = [
-  {
-    nombre: "Zapatillas Puma Future Rider De Hombre",
-    precio: 27719.0,
-    img: "../imagenes/productos/ZapatillasPuma1SinFondo.png",
-  },
-  {
-    nombre: "Zapatillas Suede Classic XXI ADP",
-    precio: 29999.0,
-    img: "../imagenes/productos/ZapatillaPuma2.png",
-  },
-  {
-    nombre: "Zapatillas Adidas Fast Blue",
-    precio: 39999.0,
-    img: "../imagenes/productos/ZapatillasAdidas2.png",
-  },
-
-  {
-    nombre: "Botines FUTURE Z 3.4 Neymar Jr ",
-    precio: 25199.0,
-    img: "../imagenes/productos/BotinesNeySinFondo.png",
-  },
-  {
-    nombre: "Campera Puma",
-    precio: 8399.0,
-    img: "../imagenes/productos/CamperaPuma.png",
-  },
-  {
-    nombre: "Remera Argentina entrenamiento",
-    precio: 35999.0,
-    img: "../imagenes/productos/RemeraArgentina.png",
-  },
-];
-console.log("Indumentaria -> " + indumentaria); */
-
 //tomamos el contenedor dinamico
 const contenedorDinamico = document.querySelector(".contenedor-dinamico");
 const btnSearch = document.querySelector("#btn-search");
@@ -50,9 +14,6 @@ const navInput = document.querySelector("#nav-input");
 const nav = document.querySelector("#nav");
 const btnAbrir = document.querySelector("#btn-abrir");
 const btnCerrar = document.querySelector("#btn-cerrar");
-
-//renderizo los elementos html
-/* window.onload = crearHtmlBase(); */
 
 //creamos una función que cree los objetos
 function crearHtmlBase(indumentaria) {
@@ -169,8 +130,6 @@ productsList.addEventListener("click", (e) => {
       precio: producto.querySelector("p").textContent,
     };
 
-    console.log(infoProducto);
-
     //ahora vamos a ver si el producto ya se sumo previamente o es la primera vez
     const existe = allProducts.some(
       (element) => element.nombre === infoProducto.nombre
@@ -216,7 +175,6 @@ function mostarCarrito() {
   let total = 0;
   let totalProductos = 0;
   rowProduct.innerHTML = "";
-  console.log(allProducts);
   allProducts.forEach((producto) => {
     const nuevoProducto = document.createElement("div");
     nuevoProducto.innerHTML = `
@@ -241,10 +199,8 @@ function mostarCarrito() {
   });
 }
 //Lógica para eliminar un producto
-//Lo de abajo no funciona
 rowProduct.addEventListener("click", (e) => {
   if (e.target.classList.contains("bi")) {
-    //e.target.classList.contains("btn-comprar")
     e.preventDefault();
     Swal.fire({
       title: "¿Seguro que quiere eliminar el producto?",
@@ -254,10 +210,10 @@ rowProduct.addEventListener("click", (e) => {
       cancelButtonText: "No, cancelar",
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Si, borrarlo",
+      confirmButtonText: "Si, eliminarlo",
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire("Eliminado!", "Tu borraste el producto", "success");
+        Swal.fire("Eliminado!", "Tu eliminaste el producto", "success");
         const padreObjetoEliminar = e.target.parentElement.parentElement;
         const objetoEliminar =
           padreObjetoEliminar.querySelector("#producto-name");
@@ -280,6 +236,7 @@ window.addEventListener("beforeunload", (e) => {
   localStorage.setItem("productos", JSON.stringify(allProducts));
 });
 
+//Lógica para terminar el proceso de compra
 const btnTerminar = document.querySelector("#btn-terminar");
 btnTerminar.addEventListener("click", () => {
   localStorage.removeItem("productos");
